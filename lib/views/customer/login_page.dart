@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toko_roti_online/models/user_model.dart';
 import 'package:toko_roti_online/routes/app-routes.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,6 +21,27 @@ class _LoginPageState extends State<LoginPage> {
       setState(() =>_ErrorText="Isi Username dan Password");
       return;
     }
+UserModel?user;
+if (username == 'admin' && password =='1234') {
+  user = UserModel(username: username, role: 'admin');
+}else if (username =='kurir' &&  password =='courier'){
+user = UserModel(username: username, role: 'courier');
+}else{
+  user = UserModel(username: username, role: 'customer');
+}
+
+switch(user.role){
+  case 'admin':
+  Navigator.pushReplacementNamed(context, AppRoutes.adminDashboard);
+  break;
+  case 'courier':
+  Navigator.pushReplacementNamed(context, AppRoutes.coureirDashboard);
+  break;
+  default:
+  Navigator.pushReplacementNamed(context, AppRoutes.products);
+}
+
+
   }
 
   
