@@ -5,6 +5,9 @@ import 'package:toko_roti_online/views/admin/manage_order_page.dart';
 import 'package:toko_roti_online/views/admin/manage_products_page.dart';
 import 'package:toko_roti_online/views/admin/admin_profil_page.dart';
 import 'package:toko_roti_online/views/courier/courier_dashboard_page.dart';
+import 'package:toko_roti_online/views/courier/courier_profile_page.dart';
+import 'package:toko_roti_online/views/courier/delivery_detail_page.dart';
+import 'package:toko_roti_online/views/courier/delivery_list_page.dart';
 import 'package:toko_roti_online/views/customer/cart_page.dart';
 import 'package:toko_roti_online/views/customer/checkout_page.dart';
 import 'package:toko_roti_online/views/customer/login_page.dart';
@@ -15,13 +18,15 @@ import 'package:toko_roti_online/views/customer/register_page.dart';
 import 'package:toko_roti_online/views/customer/splash_screen.dart';
 
 class AppRoutes {
+
+  //register 
+
   // Route Costumer
   static const splash = "/";
   static const login = "/login";
   static const register = "/register";
   static const products= "/products";
   static const productDetail = "/productDetail";
-  static const productList = "/productList";
   static const cart = "/cart";
   static const checkout = "/checkout";
   static const orderStatus = "/orderStatus";
@@ -38,13 +43,16 @@ class AppRoutes {
 //Route Courier
 
 static const coureirDashboard = "/courier/dashboard";
-// static const listCourier = "/courier/list";
+static const courierDeliveryList= "/courier/DeliveryList";
+static const courierProfile = '/courier/CourierProfile';
+static const courierDeliveryDetail = '/courier/DeliveryDetail';
+static const courierTracking = '/courier/CourierTracking';
 
 
   static Map<String, WidgetBuilder> routes ={
     splash: (_)=> SplashScreen(),
     login: (_)=> LoginPage(),
-    productList: (_)=> ProductListPage(),
+    products: (_)=> ProductListPage(),
     register : (_)=> RegisterPage(),
     productDetail :  (_)=> ProductDetailPage(),
     cart :  (_)=> CartPage(),
@@ -56,6 +64,9 @@ static const coureirDashboard = "/courier/dashboard";
     adminCouriers : (_)=> ManageCourrierPage(),
     adminProfil :  (_)=> AdminProfilPage(),
     coureirDashboard: (_) =>CourierDashboardPage(),
+    courierDeliveryList: (_)=>DeliveryListPage(),
+    courierProfile :(_) =>CourierProfilePage(),
+    courierDeliveryDetail : (_)=>CourierDeliveryDetailPage(),
   };
 
   

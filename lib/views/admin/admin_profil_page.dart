@@ -44,9 +44,9 @@ class AdminProfilPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(11),
               ),
               child: ListTile(
-                leading: Icon(Icons.shop_2, color: Colors.blueGrey,),
-                title: Text("Nama Toko"),
-                subtitle: Text("PbTokoRoti"),
+                leading: Icon(Icons.timer, color: Colors.blueGrey,),
+                title: Text("Jam Buka "),
+                subtitle: Text("08.00 - 21.00"),
               ),
             ),
             SizedBox(height: 20,),
@@ -95,7 +95,7 @@ class AdminProfilPage extends StatelessWidget {
 
             },style: OutlinedButton.styleFrom(
               foregroundColor: Colors.yellow,
-              side: BorderSide(color: Colors.red),
+              side: BorderSide(color: Colors.amberAccent),
               padding: EdgeInsets.all(20),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
