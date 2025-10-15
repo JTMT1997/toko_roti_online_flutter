@@ -56,16 +56,16 @@ class CourierDashboardPage extends StatelessWidget {
                       );
                     },
                   ),
-                  _buildMenuCard(
-                    context,
-                    icon: Icons.person_outline,
-                    color: Colors.teal,
-                    title: "Profil Kurir",
-                    subtitle: "Lihat dan ubah informasi akun Anda",
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.courierProfile);
-                    },
-                  ),
+                  // _buildMenuCard(
+                  //   context,
+                  //   icon: Icons.person_outline,
+                  //   color: Colors.teal,
+                  //   title: "Profil Kurir",
+                  //   subtitle: "Lihat dan ubah informasi akun Anda",
+                  //   onTap: () {
+                  //     Navigator.pushNamed(context, AppRoutes.courierProfile);
+                  //   },
+                  // ),
                   _buildMenuCard(
                     context,
                     icon: Icons.map_outlined,

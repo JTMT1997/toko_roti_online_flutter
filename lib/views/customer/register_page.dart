@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toko_roti_online/models/db_helper.dart';
 import 'package:toko_roti_online/routes/app-routes.dart';
 
 
@@ -13,9 +14,10 @@ class _RegisterPageState extends State<RegisterPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  String _selectedRole = 'customer';
   String? _errorText;
 
-  void _register() {
+  Future<void> _register() async {
     if (_nameController.text.isEmpty ||
         _emailController.text.isEmpty ||
         _passwordController.text.isEmpty) {
@@ -23,24 +25,36 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Simulasi pendaftaran sukses
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Pendaftaran berhasil! Silakan login.")),
-    );
-    Navigator.pushReplacementNamed(context, AppRoutes.login);
+    try {
+      final id = await DBHelper().registerUser(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+        _nameController.text.trim(),
+        _selectedRole,
+      );
+      if (id > 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Pendaftaran berhasil! Silakan login.")),
+        );
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email sudah digunakan")),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E7), // warna cream lembut
+      backgroundColor: const Color(0xFFFFF8E7),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Logo & Judul
               const Icon(Icons.bakery_dining, size: 80, color: Colors.brown),
               const SizedBox(height: 8),
               const Text(
@@ -53,7 +67,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 30),
 
-              // 🧍‍♀️ Input Nama
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -68,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 16),
 
-              // Input Email
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -84,7 +96,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 16),
 
-              // Input Password
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -98,8 +109,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 obscureText: true,
               ),
+              const SizedBox(height: 16),
 
-              // Pesan error
+              DropdownButtonFormField<String>(
+                value: _selectedRole,
+                decoration: InputDecoration(
+                  labelText: "Peran",
+                  prefixIcon: const Icon(Icons.person_outline, color: Colors.brown),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                items: ['admin', 'kurir', 'customer'].map((role) {
+                  return DropdownMenuItem(value: role, child: Text(role));
+                }).toList(),
+                onChanged: (value) => setState(() => _selectedRole = value!),
+              ),
+
               if (_errorText != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -111,7 +139,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
               const SizedBox(height: 24),
 
-              // Tombol Daftar
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -132,7 +159,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
               const SizedBox(height: 20),
 
-              // 🔗 Link ke Login
               TextButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, AppRoutes.login);

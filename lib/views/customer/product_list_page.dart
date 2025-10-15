@@ -1,183 +1,125 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:toko_roti_online/models/database_helper.dart';
+import 'package:toko_roti_online/models/product.dart';
+import 'package:toko_roti_online/models/purchase.dart';
+import 'package:toko_roti_online/models/transaction_helper.dart';
 import 'package:toko_roti_online/routes/app-routes.dart';
 
+class ProductListPage extends StatefulWidget {
+  @override
+  State<ProductListPage> createState() => _ProductListPageState();
+}
 
-class ProductListPage extends StatelessWidget {
-  const ProductListPage({super.key});
+class _ProductListPageState extends State<ProductListPage> {
+  List<Product> _products = [];
+
+  Future<void> _loadProducts() async {
+    final db = TransactionHelper();
+    final products = await db.getProducts();
+    setState(() {
+      _products = products;
+    });
+  }
+
+  Future<void> _buyProduct(Product p) async {
+    final db = TransactionHelper();
+    final purchase = Purchase(
+      productId: p.id!,
+      productName: p.name,
+      price: p.price,
+      imagePath: p.imagePath,
+    );
+    await db.insertPurchase(purchase);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Berhasil membeli ${p.name}')),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> products = [
-      {
-        "name": "Roti Tawar",
-        "price": 10000,
-        "image": "assets/images/roti_tawar.png",
-        "description":
-            "Roti tawar lembut dan segar, cocok untuk sarapan pagi dengan selai.",
-        "expired": "12/12/2025",
-      },
-      {
-        "name": "Roti Coklat",
-        "price": 12000,
-        "image": "assets/images/roti_coklat.png",
-        "description":
-            "Roti isi coklat manis dengan aroma lezat yang menggoda selera.",
-        "expired": "08/12/2025",
-      },
-      {
-        "name": "Roti Keju",
-        "price": 15000,
-        "image": "assets/images/roti_keju.png",
-        "description":
-            "Roti lembut dengan lelehan keju yang gurih, cocok untuk semua usia.",
-        "expired": "15/12/2025",
-      },
-      {
-        "name": "Roti Susu",
-        "price": 15500,
-        "image": "assets/images/roti_susu.png",
-        "description":
-            "Roti empuk dengan rasa susu yang manis dan lembut di mulut.",
-        "expired": "10/12/2025",
-      },
-      {
-        "name": "Roti Pandan",
-        "price": 17000,
-        "image": "assets/images/roti_pandan.png",
-        "description":
-            "Roti pandan lembut dengan aroma harum khas daun pandan asli.",
-        "expired": "20/12/2025",
-      },
-      {
-        "name": "Roti Kopi",
-        "price": 16000,
-        "image": "assets/images/roti_kopi.png",
-        "description":
-            "Roti dengan aroma kopi kuat, cocok untuk teman minum teh sore hari.",
-        "expired": "18/12/2025",
-      },
-    ];
-
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E7),
       appBar: AppBar(
-        title: const Text("Daftar Roti"),
-        backgroundColor: Colors.brown,
-        foregroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 3,
+        title: Text('Produk Toko Roti'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, AppRoutes.login);
+          },
+          icon: Icon(Icons.logout),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.purchaseList);
+            },
+          ),
+        ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: GridView.builder(
-          itemCount: products.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // tampil dua kolom
-            childAspectRatio: 0.9, // ini pengatur tinggi card
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-          ),
-          itemBuilder: (context, index) {
-            final product = products[index];
-            return InkWell(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRoutes.productDetail,
-                  arguments: product,
-                );
-              },
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                elevation: 5,
-                shadowColor: Colors.brown.withOpacity(0.3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Gambar produk
-                    ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(15),
-                      ),
-                      child: Image.asset(
-                        product['image'] ?? 'assets/images/roti_tawar.png',
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Nama produk
-                    Text(
-                      product['name'].toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.brown,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-
-                    // Harga produk
-                    Text(
-                      "Rp ${product['price']}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black87,
-                      ),
-                    ),
-
-                    // Expired info
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        "Exp: ${product['expired']}",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.redAccent,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    // Tombol Lihat Detail
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 6,
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.productDetail,
-                            arguments: product,
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.brown,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+        padding: const EdgeInsets.all(8.0),
+        child: _products.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _products.length,
+                itemBuilder: (context, index) {
+                  final p = _products[index];
+                  return Card(
+                    elevation: 4,
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              File(p.imagePath),
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                          minimumSize: const Size(double.infinity, 40),
-                        ),
-                        child: const Text(
-                          "Lihat Detail",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  p.name,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Rp ${p.price}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                ElevatedButton(
+                                  onPressed: () => _buyProduct(p),
+                                  child: Text('Beli'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
       ),
     );
   }

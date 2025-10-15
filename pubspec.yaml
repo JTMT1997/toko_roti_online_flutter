@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   sqflite: ^2.4.2
   intl: ^0.20.2
+  path: ^1.8.3
+
   path_provider: ^2.1.5
   geolocator: ^14.0.2
   http: ^1.5.0
@@ -50,6 +52,7 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_neumorphic_plus: ^3.5.0
   awesome_snackbar_content: ^0.1.8
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -73,9 +76,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-  - assets/images/roti_kopi.png
-
-
+  - assets/images/roti_tawar.png
+  - assets/images/roti_coklat.png
+  - assets/images/roti_keju.png
+  - assets/images/roti_susu.png
+  - assets/images/roti_pandan.png
+  - assets/images/foto_jeremy.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

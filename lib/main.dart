@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toko_roti_online/routes/app-routes.dart';
-import 'package:toko_roti_online/views/admin/admin_dashboard_page.dart';
-import 'package:toko_roti_online/views/customer/login_page.dart';
-import 'package:toko_roti_online/views/customer/splash_screen.dart';
+import 'package:toko_roti_online/views/admin/product_list.dart';
+
 
 void main(List<String> args) {
   runApp(const TokoRotiApps());
@@ -19,7 +18,7 @@ class TokoRotiApps extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.brown),
       initialRoute: AppRoutes.splash,
       routes: AppRoutes.routes
-      // home:  SplashScreen(),
+      // home:  ProductList(),
     );
   }
 }

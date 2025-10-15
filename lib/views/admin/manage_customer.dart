@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
 import 'package:toko_roti_online/models/db_helper.dart';
-import 'package:toko_roti_online/views/admin/edit_courier_page.dart';
+
+import 'package:toko_roti_online/views/admin/edit_customer_page.dart';
 
 
-
-class ManageCourrierPage extends StatefulWidget {
-  const ManageCourrierPage({super.key});
+class ManageCustomerPage extends StatefulWidget {
+  const ManageCustomerPage({super.key});
 
   @override
-  State<ManageCourrierPage> createState() => _ManageCourrierPageState();
+  State<ManageCustomerPage> createState() => _ManageCustomerPageState();
 }
 
-class _ManageCourrierPageState extends State<ManageCourrierPage> {
+class _ManageCustomerPageState extends State<ManageCustomerPage> {
   List<Map<String, dynamic>> _users = [];
 
   Future<void> _loadUsers() async {
     final allUsers = await DBHelper().getAllUsers();
 
     // Filter: hanya tampilkan user dengan role 'customer'
-    final filtered = allUsers.where((user) => user['role'] == 'kurir').toList();
+    final filtered = allUsers.where((user) => user['role'] == 'customer').toList();
 
     setState(() => _users = filtered);
   }
@@ -42,12 +42,12 @@ class _ManageCourrierPageState extends State<ManageCourrierPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daftar Kurir'),
+        title: const Text('Daftar Customer'),
         backgroundColor: Colors.brown,
       ),
       backgroundColor: const Color(0xFFFFF8E7),
       body: _users.isEmpty
-          ? const Center(child: Text('Belum ada data courier'))
+          ? const Center(child: Text('Belum ada data customer'))
           : ListView.builder(
               itemCount: _users.length,
               itemBuilder: (context, index) {
@@ -67,7 +67,7 @@ class _ManageCourrierPageState extends State<ManageCourrierPage> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EditCourierPage(userData: user),
+                                builder: (context) => EditCustomerPage(userData: user),
                               ),
                             );
                             _loadUsers();
@@ -78,17 +78,17 @@ class _ManageCourrierPageState extends State<ManageCourrierPage> {
                           onPressed: () {
                             showDialog(
                               context: context,
-                              builder: (ctx) => AlertDialog(
+                              builder: (context) => AlertDialog(
                                 title: const Text('Konfirmasi'),
                                 content: const Text('Yakin ingin menghapus customer ini?'),
                                 actions: [
                                   TextButton(
-                                    onPressed: () => Navigator.pop(ctx),
+                                    onPressed: () => Navigator.pop(context),
                                     child: const Text('Batal'),
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(ctx);
+                                      Navigator.pop(context);
                                       _deleteUser(user['id']);
                                     },
                                     child: const Text('Hapus', style: TextStyle(color: Colors.red)),

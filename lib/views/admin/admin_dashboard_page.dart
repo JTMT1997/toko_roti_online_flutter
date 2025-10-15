@@ -16,17 +16,20 @@ class AdminDashboardPage extends StatelessWidget {
           mainAxisSpacing: 15,
           crossAxisCount: 2,
           children: [
-            _menuCard(context, "Kelola Produk", Icons.recent_actors, () {
+            _menuCard(context, "Kelola Produk", Icons.cake, () {
               _navigateWithLoading(context, AppRoutes.adminProducts);
             }),
-            _menuCard(context, "Kelola Pesanan", Icons.recent_actors, () {
+            _menuCard(context, "Kelola Pesanan", Icons.shopping_cart_checkout_sharp, () {
               _navigateWithLoading(context, AppRoutes.adminOrders);
             }),
-            _menuCard(context, "Kelola Kurir", Icons.delivery_dining, () {
+            _menuCard(context, "Data Kurir", Icons.delivery_dining, () {
               _navigateWithLoading(context, AppRoutes.adminCouriers);
             }),
             _menuCard(context, "Profil Admin", Icons.person, () {
               _navigateWithLoading(context, AppRoutes.adminProfil);
+            }),
+             _menuCard(context, "Data Customer", Icons.people, () {
+              _navigateWithLoading(context, AppRoutes.adminUser);
             }),
           ],
         ),
